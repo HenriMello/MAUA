@@ -1,19 +1,17 @@
 public class Retorno {
     int contador;
     boolean achou;
-    //só o construtor (padrão) que zera tudo
+    //só o construtor que zera tudo
     public int getContador() {
         return contador;
     }
     public boolean getAchou() {
-        return achou;    
+        return achou;
     }
-    public void incrementaContador(){
+    public void incrementaContador() {
         contador++;
-
     }
-    public void setAchou(boolean achou) {
+    public void setAchou (boolean achou) {
         this.achou = achou;
     }
-    
 }

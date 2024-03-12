@@ -38,19 +38,25 @@ public class MeuVetor {
     }
 
     public void adiciona(int elemento) {
-        if (estaCheio()) {
-            redimensiona(v.length*2);
-        }
+        if (estaCheio()) redimensiona(v.length*2);
         v[++ultimaPos] = elemento;
     }
-
     public void adiciona(double elemento) {
-        if (estaCheio()) {
-            redimensiona(v.length*2);
-        }
+        if (estaCheio()) redimensiona(v.length*2);
         v[++ultimaPos] = elemento;
     }
-    
+    public void adiciona(double elemento, int posicao) {
+        if (estaCheio()) redimensiona(v.length*2);
+        if (posicao > ultimaPos) v[++ultimaPos] = elemento;
+        else {
+            //precisa arrastar
+            int i;
+            for (i=ultimaPos+1; i>posicao; i--) 
+                v[i] = v[i-1];
+            v[i] = elemento;
+            ultimaPos++;
+        }
+    }
     public double remove() {
         if (estaVazio()) return 0;
         double aux = v[ultimaPos--];
@@ -59,7 +65,26 @@ public class MeuVetor {
         }
         return aux;
     }
-
+    public double remove(int pos) {
+        if (pos < 0 || estaVazio() || pos > ultimaPos) return 0;
+        double aux = v[pos];
+        for (int i=pos; i<ultimaPos; i++) {
+            v[i] = v[i+1];
+        }
+        ultimaPos--;
+        if (v.length >= 10 && ultimaPos <= v.length / 4) {
+            redimensiona(v.length/2);
+        }
+        return aux;
+    }
+    public boolean remove (double elemento) {
+        //remove a primeira ocorrencia do elemento e devolve sucesso ou fracasso
+        return true;
+    }
+    public int removeAll (double elemento) {
+        //remove todas as ocorrencias do elemento e devolve quantos foram removidos
+        return 0;
+    }
     private void redimensiona(int novaCapacidade) {
         double[] temp = new double[novaCapacidade];
         for (int i = 0; i <= ultimaPos; i++) {
@@ -110,30 +135,28 @@ public class MeuVetor {
     }
     public Retorno buscaSimples (double x) {
         Retorno r = new Retorno();
-        for (int i = 0; i < v.length; i++) {
+        for (int i = 0; i<v.length; i++) {
             r.incrementaContador();
-            if(v[i] == x){
-                r.setAchou(true);
-                return(r);
-            }
-                
-        }
-        return r;
-    }
-    public Retorno buscaBinariac(double x){
-        Retorno r = new Retorno();
-        int inicio = 0, fim = v.length - 1;
-        int meio;
-        while (inicio <= fim) {
-            meio = (inicio + fim)/2;
-            r.incrementaContador();
-            if (x == v[meio]){
+            if (v[i] == x) {
                 r.setAchou(true);
                 return r;
             }
-            if(x > v[meio]){
-                inicio = meio + 1;
+        }
+        return r;
+    }
+    public Retorno buscaBinaria (double x) {
+        Retorno r = new Retorno();
+        int inicio = 0, fim = v.length - 1; 
+        int meio;
+        while (inicio <= fim) {
+            meio = (inicio + fim) / 2;
+            r.incrementaContador();
+            if (x == v[meio]) {
+                r.setAchou(true);
+                return r;
             }
+            if (x > v[meio])
+                inicio = meio + 1;
             else
                 fim = meio - 1;
         }
